@@ -11,6 +11,10 @@ enum HTMLTemplate {
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" media="(prefers-color-scheme: light)">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" media="(prefers-color-scheme: dark)">
+        <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
         <style>
         @import url('https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css');
 
@@ -149,18 +153,42 @@ enum HTMLTemplate {
             border-collapse: collapse;
             width: 100%;
             margin-bottom: 1em;
+            border-top: 2px solid var(--fg);
+            border-bottom: 2px solid var(--fg);
         }
 
         th, td {
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            text-align: left;
+            padding: 6px 12px;
+            border: none;
         }
 
-        th {
-            font-weight: bold;
-            background-color: var(--code-bg);
+        thead tr {
+            border-bottom: 1px solid var(--fg);
         }
+
+        th { font-weight: bold; }
+
+        pre[class*="language-"],
+        code[class*="language-"] {
+            background-color: var(--code-bg) !important;
+        }
+
+        .footnotes {
+            margin-top: 2em;
+            font-size: 0.85em;
+            color: var(--fg-secondary);
+        }
+
+        .footnotes hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin-bottom: 0.5em;
+        }
+
+        .footnotes ol {
+            padding-left: 1.5em;
+        }
+
         .katex-display {
             margin: 1em 0;
             text-align: center;
@@ -178,11 +206,15 @@ enum HTMLTemplate {
                 });
             }
         }
+        function renderAll() {
+            renderMath();
+            if (typeof Prism !== 'undefined') { Prism.highlightAll(); }
+        }
         document.addEventListener('DOMContentLoaded', function() {
             var check = setInterval(function() {
                 if (typeof renderMathInElement === 'function') {
                     clearInterval(check);
-                    renderMath();
+                    renderAll();
                 }
             }, 50);
         });
