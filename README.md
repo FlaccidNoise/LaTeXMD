@@ -22,7 +22,7 @@ Built with [Claude Opus 4.6](https://claude.ai).
 
 ### Download (Recommended)
 
-1. Download `LaTeXMD.dmg` from [Releases](../../releases)
+1. Download [`LaTeXMD.dmg`](https://github.com/FlaccidNoise/LaTeXMD/releases/latest/download/LaTeXMD.dmg)
 2. Open the DMG
 3. Drag LaTeXMD to Applications
 4. Launch and optionally set as default .md handler
