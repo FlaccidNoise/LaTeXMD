@@ -1,0 +1,169 @@
+import Foundation
+
+enum HTMLTemplate {
+    static func page(body: String) -> String {
+        """
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        @import url('https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css');
+
+        :root {
+            --bg: #ffffff;
+            --fg: #1a1a1a;
+            --fg-secondary: #444444;
+            --code-bg: #f5f5f0;
+            --border: #cccccc;
+            --link: #0645ad;
+            --blockquote-border: #999999;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1a1a1a;
+                --fg: #e0e0e0;
+                --fg-secondary: #aaaaaa;
+                --code-bg: #2a2a2a;
+                --border: #555555;
+                --link: #6ca0dc;
+                --blockquote-border: #666666;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Computer Modern Serif", Georgia, "Times New Roman", serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: var(--fg);
+            background-color: var(--bg);
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: justify;
+            hyphens: auto;
+            -webkit-hyphens: auto;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: normal;
+            text-align: left;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            margin-top: 0.5em;
+            margin-bottom: 1em;
+        }
+
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.25em; font-style: italic; }
+        h4 { font-size: 1.1em; font-style: italic; }
+        h5 { font-size: 1em; }
+        h6 { font-size: 0.9em; color: var(--fg-secondary); }
+
+        p {
+            margin-bottom: 1em;
+            text-indent: 0;
+        }
+
+        a {
+            color: var(--link);
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        strong { font-weight: bold; }
+        em { font-style: italic; }
+
+        code {
+            font-family: "Computer Modern Typewriter", "Courier New", monospace;
+            font-size: 0.9em;
+            background-color: var(--code-bg);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 16px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin-bottom: 1em;
+            border: 1px solid var(--border);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--blockquote-border);
+            padding-left: 1em;
+            margin-left: 0;
+            margin-bottom: 1em;
+            color: var(--fg-secondary);
+            font-style: italic;
+        }
+
+        ul, ol {
+            margin-bottom: 1em;
+            padding-left: 2em;
+        }
+
+        li { margin-bottom: 0.3em; }
+
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2em 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1em auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+            background-color: var(--code-bg);
+        }
+        </style>
+        </head>
+        <body>
+        \(body)
+        </body>
+        </html>
+        """
+    }
+}
