@@ -29,6 +29,28 @@ enum MarkdownParser {
             text.replaceSubrange(Range(match.range, in: text)!, with: placeholder)
         }
 
+        // Extract display math ($$...$$) — protect from markdown processing
+        var displayMath: [String: String] = [:]
+        let displayMathPattern = try! NSRegularExpression(pattern: "\\$\\$([\\s\\S]*?)\\$\\$", options: [])
+        let displayMathMatches = displayMathPattern.matches(in: text, range: NSRange(text.startIndex..., in: text))
+        for (i, match) in displayMathMatches.reversed().enumerated() {
+            let content = text[Range(match.range(at: 1), in: text)!]
+            let placeholder = "%%DISPLAYMATH_\(i)%%"
+            displayMath[placeholder] = "$$\(content)$$"
+            text.replaceSubrange(Range(match.range, in: text)!, with: placeholder)
+        }
+
+        // Extract inline math ($...$) — protect from markdown processing
+        var inlineMath: [String: String] = [:]
+        let inlineMathPattern = try! NSRegularExpression(pattern: "(?<!\\$)\\$(?!\\$)([^$\\n]+)\\$(?!\\$)", options: [])
+        let inlineMathMatches = inlineMathPattern.matches(in: text, range: NSRange(text.startIndex..., in: text))
+        for (i, match) in inlineMathMatches.reversed().enumerated() {
+            let content = text[Range(match.range(at: 1), in: text)!]
+            let placeholder = "%%INLINEMATH_\(i)%%"
+            inlineMath[placeholder] = "$\(content)$"
+            text.replaceSubrange(Range(match.range, in: text)!, with: placeholder)
+        }
+
         // Process line by line
         let lines = text.components(separatedBy: "\n")
         var html: [String] = []
@@ -131,7 +153,13 @@ enum MarkdownParser {
 
         var result = html.joined(separator: "\n")
 
-        // Restore code blocks and inline code
+        // Restore math, code blocks, and inline code
+        for (placeholder, replacement) in inlineMath {
+            result = result.replacingOccurrences(of: placeholder, with: replacement)
+        }
+        for (placeholder, replacement) in displayMath {
+            result = result.replacingOccurrences(of: placeholder, with: replacement)
+        }
         for (placeholder, replacement) in codeBlocks {
             result = result.replacingOccurrences(of: placeholder, with: replacement)
         }

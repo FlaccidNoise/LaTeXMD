@@ -8,6 +8,9 @@ enum HTMLTemplate {
         <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
         <style>
         @import url('https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css');
 
@@ -158,7 +161,32 @@ enum HTMLTemplate {
             font-weight: bold;
             background-color: var(--code-bg);
         }
+        .katex-display {
+            margin: 1em 0;
+            text-align: center;
+        }
         </style>
+        <script>
+        function renderMath() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var check = setInterval(function() {
+                if (typeof renderMathInElement === 'function') {
+                    clearInterval(check);
+                    renderMath();
+                }
+            }, 50);
+        });
+        </script>
         </head>
         <body>
         \(body)

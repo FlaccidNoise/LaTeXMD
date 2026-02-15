@@ -1,14 +1,21 @@
 # LaTeXMD
 
-A lightweight, native macOS app that renders Markdown files with beautiful LaTeX-style typography.
+A lightweight, native macOS app that renders Markdown files with beautiful LaTeX-style typography and math equations.
+
+Built with [Claude Opus 4.6](https://claude.ai).
+
+| View Mode | Edit Mode |
+|:-:|:-:|
+| ![View Mode](Assets/screenshots/view-mode.png) | ![Edit Mode](Assets/screenshots/edit-mode.png) |
 
 ## Features
 
+- **LaTeX Math Rendering** — Full math support via KaTeX (`$...$` inline, `$$...$$` display)
 - **LaTeX Typography** — Computer Modern fonts, justified text, proper spacing
 - **View / Edit Toggle** — Switch between rendered view and plain text editor
 - **Native macOS App** — File > Open, Save, Recent Documents, double-click .md files
 - **Dark Mode** — Automatic dark mode support
-- **Zero Dependencies** — Pure Swift + system frameworks
+- **Zero Dependencies** — Pure Swift + system frameworks (KaTeX loaded from CDN)
 - **Open Source** — MIT License
 
 ## Install

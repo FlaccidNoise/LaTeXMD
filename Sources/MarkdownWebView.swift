@@ -23,7 +23,7 @@ struct MarkdownWebView: NSViewRepresentable {
             .replacingOccurrences(of: "${", with: "\\${")
 
         if context.coordinator.isLoaded {
-            webView.evaluateJavaScript("document.body.innerHTML = `\(escaped)`;", completionHandler: nil)
+            webView.evaluateJavaScript("document.body.innerHTML = `\(escaped)`; renderMath();", completionHandler: nil)
         } else {
             context.coordinator.pendingUpdate = escaped
         }
@@ -40,7 +40,7 @@ struct MarkdownWebView: NSViewRepresentable {
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             isLoaded = true
             if let update = pendingUpdate {
-                webView.evaluateJavaScript("document.body.innerHTML = `\(update)`;", completionHandler: nil)
+                webView.evaluateJavaScript("document.body.innerHTML = `\(update)`; renderMath();", completionHandler: nil)
                 pendingUpdate = nil
             }
         }

@@ -19,9 +19,17 @@ svg = '''<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1024\" height=\"1024\
     </linearGradient>
   </defs>
   <rect width=\"1024\" height=\"1024\" rx=\"180\" fill=\"url(#bg)\"/>
-  <text x=\"512\" y=\"580\" text-anchor=\"middle\" font-family=\"Georgia, serif\"
-        font-size=\"520\" fill=\"#ecf0f1\" font-style=\"italic\">M</text>
-  <text x=\"512\" y=\"820\" text-anchor=\"middle\" font-family=\"Georgia, serif\"
+  <!-- Stethoscope -->
+  <path d=\"M 400 160 L 400 340 Q 400 460 512 500 Q 624 460 624 340 L 624 160\"
+        stroke=\"#ecf0f1\" stroke-width=\"20\" fill=\"none\" stroke-linecap=\"round\"/>
+  <circle cx=\"400\" cy=\"150\" r=\"24\" fill=\"#ecf0f1\"/>
+  <circle cx=\"624\" cy=\"150\" r=\"24\" fill=\"#ecf0f1\"/>
+  <circle cx=\"512\" cy=\"520\" r=\"44\" fill=\"#ecf0f1\" opacity=\"0.9\"/>
+  <circle cx=\"512\" cy=\"520\" r=\"22\" fill=\"#1a252f\"/>
+  <!-- Dr. text -->
+  <text x=\"512\" y=\"740\" text-anchor=\"middle\" font-family=\"Georgia, serif\"
+        font-size=\"260\" fill=\"#ecf0f1\" font-style=\"italic\">Dr.</text>
+  <text x=\"512\" y=\"910\" text-anchor=\"middle\" font-family=\"Georgia, serif\"
         font-size=\"140\" fill=\"#95a5a6\" letter-spacing=\"8\">LaTeX</text>
 </svg>'''
 
