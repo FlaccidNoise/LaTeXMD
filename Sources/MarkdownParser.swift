@@ -254,7 +254,31 @@ enum MarkdownParser {
     private static func inlineFormat(_ text: String) -> String {
         var result = text
 
-        // Smart typography (safe here — code/math already extracted to placeholders)
+        // Extract images and links FIRST to protect URLs from smart typography
+        var linkPlaceholders: [String: String] = [:]
+        var counter = 0
+
+        let imgPattern = try! NSRegularExpression(pattern: "!\\[([^\\]]*)\\]\\(([^)]+)\\)")
+        for m in imgPattern.matches(in: result, range: NSRange(result.startIndex..., in: result)).reversed() {
+            let alt = String(result[Range(m.range(at: 1), in: result)!])
+            let src = String(result[Range(m.range(at: 2), in: result)!])
+            let ph = "%%ILINK\(counter)%%"
+            counter += 1
+            linkPlaceholders[ph] = "<img src=\"\(src)\" alt=\"\(alt)\">"
+            result.replaceSubrange(Range(m.range, in: result)!, with: ph)
+        }
+
+        let linkPattern = try! NSRegularExpression(pattern: "\\[([^\\]]+)\\]\\(([^)]+)\\)")
+        for m in linkPattern.matches(in: result, range: NSRange(result.startIndex..., in: result)).reversed() {
+            let linkText = String(result[Range(m.range(at: 1), in: result)!])
+            let url = String(result[Range(m.range(at: 2), in: result)!])
+            let ph = "%%ILINK\(counter)%%"
+            counter += 1
+            linkPlaceholders[ph] = "<a href=\"\(url)\">\(linkText)</a>"
+            result.replaceSubrange(Range(m.range, in: result)!, with: ph)
+        }
+
+        // Smart typography (safe now — code/math/links all extracted)
         result = result.replacingOccurrences(of: "---", with: "\u{2014}")  // em-dash
         result = result.replacingOccurrences(of: "--", with: "\u{2013}")   // en-dash
         result = result.replacingOccurrences(of: "...", with: "\u{2026}") // ellipsis
@@ -266,20 +290,6 @@ enum MarkdownParser {
         result = result.replacingOccurrences(
             of: "'([^']+)'",
             with: "\u{2018}$1\u{2019}",
-            options: .regularExpression
-        )
-
-        // Images (before links)
-        result = result.replacingOccurrences(
-            of: "!\\[([^\\]]*)\\]\\(([^)]+)\\)",
-            with: "<img src=\"$2\" alt=\"$1\">",
-            options: .regularExpression
-        )
-
-        // Links
-        result = result.replacingOccurrences(
-            of: "\\[([^\\]]+)\\]\\(([^)]+)\\)",
-            with: "<a href=\"$2\">$1</a>",
             options: .regularExpression
         )
 
@@ -296,6 +306,11 @@ enum MarkdownParser {
             with: "<em>$2</em>",
             options: .regularExpression
         )
+
+        // Restore links and images
+        for (ph, replacement) in linkPlaceholders {
+            result = result.replacingOccurrences(of: ph, with: replacement)
+        }
 
         return result
     }
@@ -322,8 +337,7 @@ enum MarkdownParser {
         s = s.replacingOccurrences(of: "[*_`~\\[\\]]", with: "", options: .regularExpression)
         return s.lowercased()
             .replacingOccurrences(of: "[^a-z0-9\\s-]", with: "", options: .regularExpression)
-            .replacingOccurrences(of: "\\s+", with: "-", options: .regularExpression)
-            .replacingOccurrences(of: "-{2,}", with: "-", options: .regularExpression)
+            .replacingOccurrences(of: "\\s", with: "-", options: .regularExpression)
             .trimmingCharacters(in: CharacterSet(charactersIn: "-"))
     }
 

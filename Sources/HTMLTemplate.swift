@@ -218,6 +218,25 @@ enum HTMLTemplate {
                 }
             }, 50);
         });
+        // Handle anchor links in WKWebView (fragment navigation doesn't work with loadHTMLString)
+        document.addEventListener('click', function(e) {
+            var a = e.target.closest('a[href^="#"]');
+            if (a) {
+                e.preventDefault();
+                var id = a.getAttribute('href').substring(1);
+                var target = document.getElementById(id);
+                // Fallback: find first element whose id starts with the anchor
+                if (!target) {
+                    var els = document.querySelectorAll('[id]');
+                    for (var i = 0; i < els.length; i++) {
+                        if (els[i].id.indexOf(id) === 0) { target = els[i]; break; }
+                    }
+                }
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
         </script>
         </head>
         <body>
