@@ -93,7 +93,8 @@ enum MarkdownParser {
                 let headerLine = String(line[headerMatch])
                 let level = headerLine.prefix(while: { $0 == "#" }).count
                 let content = String(headerLine.drop(while: { $0 == "#" }).dropFirst())
-                html.append("<h\(level)>\(inlineFormat(content))</h\(level)>")
+                let slug = slugify(content)
+                html.append("<h\(level) id=\"\(slug)\">\(inlineFormat(content))</h\(level)>")
                 i += 1
                 continue
             }
@@ -312,6 +313,18 @@ enum MarkdownParser {
             inList = false
             listType = ""
         }
+    }
+
+    private static func slugify(_ text: String) -> String {
+        // Strip placeholder tokens and markdown formatting before slugifying
+        var s = text
+        s = s.replacingOccurrences(of: "%%[A-Z]+\\d+%%", with: "", options: .regularExpression)
+        s = s.replacingOccurrences(of: "[*_`~\\[\\]]", with: "", options: .regularExpression)
+        return s.lowercased()
+            .replacingOccurrences(of: "[^a-z0-9\\s-]", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "\\s+", with: "-", options: .regularExpression)
+            .replacingOccurrences(of: "-{2,}", with: "-", options: .regularExpression)
+            .trimmingCharacters(in: CharacterSet(charactersIn: "-"))
     }
 
     private static func closeBlockquote(_ html: inout [String], _ inBlockquote: inout Bool) {
