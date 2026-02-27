@@ -11,7 +11,7 @@ enum MarkdownParser {
         for (i, match) in codeMatches.reversed().enumerated() {
             let lang = text[Range(match.range(at: 1), in: text)!]
             let code = text[Range(match.range(at: 2), in: text)!]
-            let placeholder = "%%CODEBLOCK_\(i)%%"
+            let placeholder = "%%CODEBLOCK\(i)%%"
             let escaped = escapeHTML(String(code))
             let langAttr = lang.isEmpty ? "" : " class=\"language-\(lang)\""
             codeBlocks[placeholder] = "<pre><code\(langAttr)>\(escaped)</code></pre>"
@@ -24,7 +24,7 @@ enum MarkdownParser {
         let inlineMatches = inlineCodePattern.matches(in: text, range: NSRange(text.startIndex..., in: text))
         for (i, match) in inlineMatches.reversed().enumerated() {
             let code = text[Range(match.range(at: 1), in: text)!]
-            let placeholder = "%%INLINECODE_\(i)%%"
+            let placeholder = "%%INLINECODE\(i)%%"
             inlineCode[placeholder] = "<code>\(escapeHTML(String(code)))</code>"
             text.replaceSubrange(Range(match.range, in: text)!, with: placeholder)
         }
@@ -35,7 +35,7 @@ enum MarkdownParser {
         let displayMathMatches = displayMathPattern.matches(in: text, range: NSRange(text.startIndex..., in: text))
         for (i, match) in displayMathMatches.reversed().enumerated() {
             let content = text[Range(match.range(at: 1), in: text)!]
-            let placeholder = "%%DISPLAYMATH_\(i)%%"
+            let placeholder = "%%DISPLAYMATH\(i)%%"
             displayMath[placeholder] = "$$\(content)$$"
             text.replaceSubrange(Range(match.range, in: text)!, with: placeholder)
         }
@@ -46,7 +46,7 @@ enum MarkdownParser {
         let inlineMathMatches = inlineMathPattern.matches(in: text, range: NSRange(text.startIndex..., in: text))
         for (i, match) in inlineMathMatches.reversed().enumerated() {
             let content = text[Range(match.range(at: 1), in: text)!]
-            let placeholder = "%%INLINEMATH_\(i)%%"
+            let placeholder = "%%INLINEMATH\(i)%%"
             inlineMath[placeholder] = "$\(content)$"
             text.replaceSubrange(Range(match.range, in: text)!, with: placeholder)
         }
@@ -192,7 +192,7 @@ enum MarkdownParser {
             }
 
             // Code block placeholder
-            if line.hasPrefix("%%CODEBLOCK_") {
+            if line.hasPrefix("%%CODEBLOCK") {
                 html.append(line)
                 i += 1
                 continue
